@@ -1,0 +1,31 @@
+{
+  "name": "ppp-kiviadantas",
+  "version": "1.0.0",
+  "description": "Projeto de portfólio para automação de testes de API e-commerce com foco em regras de negócio e casos de borda",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kiviachristin-cell/ppp-KiviaDantas.git"
+  },
+  "keywords": [
+    "qa",
+    "api",
+    "automation",
+    "ecommerce",
+    "serverest"
+  ],
+  "author": "Kivia Dantas",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/kiviachristin-cell/ppp-KiviaDantas/issues"
+  },
+  "homepage": "https://github.com/kiviachristin-cell/ppp-KiviaDantas#readme",
+  "devDependencies": {
+    "vitest": "^4.1.10"
+  }
+}
