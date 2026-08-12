@@ -94,7 +94,7 @@ Antes de rodar o projeto, certifique-se de ter instalado:
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/kiviachristin-cell/ppp-KiviaDantas.git
+git clone https://github.com/kiviachristina/ppp-KiviaDantas.git
 cd ppp-KiviaDantas
 ```
 
