@@ -1,4 +1,4 @@
-# Automação de Testes de API — PPP KiviaDantas
+# Automação de Testes de API
  
 Projeto de portfólio focado em automação e validação de APIs (E‑Commerce). A solução implementa uma API REST em memória (para fins de teste), uma suíte de testes automatizados com Vitest + Supertest e documentação OpenAPI (Swagger). A API foi construída em Node.js usando Express e utiliza JWT para autenticação dos endpoints protegidos.
  
@@ -255,9 +255,7 @@ mindmap
  
 ---
  
-Se quiser, atualizo o `README.md` com diagramas de sequência ou uma coleção Postman exportada — qual formato prefere?  
- 
- 
+
 Resultado esperado: cadastro com sucesso
  
 <<<<<<< HEAD
@@ -317,15 +315,12 @@ Este projeto foi desenvolvido como material de portfólio para demonstrar capaci
 - documentação de testes e rastreabilidade
 - apresentação de evidências de qualidade em projetos reais
  
-## Autor
- 
-Kivia Dantas
  
 ## Licença
  
 Este projeto está sob a licença ISC.
 =======
-## 👤 Autora
+## Autora
  
 Kívia Dantas
  
