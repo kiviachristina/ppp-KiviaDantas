@@ -21,68 +21,87 @@ npm start     # inicia com node
 ```
 
 Abra a documentação interativa em: `http://localhost:3000/api-docs`
-# PPP KiviaDantas - E-Commerce API (In-Memory)
+# PPP KiviaDantas — E-Commerce API (In-Memory)
 
-API REST em memória construída para servir como base de uma suíte de testes de regras de negócio e casos de borda.
+Este repositório contém uma API REST em memória desenvolvida para suportar uma suíte de testes focada em regras de negócio e casos de borda (API E-Commerce).
 
-Resumo do projeto
-- **Arquitetura:** separada em camadas: `routes`, `controllers`, `services`, `models`.
-- **Persistência:** banco em memória (arrays) dentro das services — ideal para testes automatizados.
-- **Framework:** construída com `express`.
-- **Documentação:** arquivo Swagger em `resources/swagger.json` e UI em `/api-docs`.
+Visão geral
+- Arquitetura em camadas: `routes` → `controllers` → `services` → `models`.
+- Persistência: armazenamento em memória dentro das services (arrays). Adequado para testes automatizados e exemplos.
+- Framework: `express`.
+- Autenticação: JWT via middleware em `src/api/middlewares/authMiddleware.js`.
+- Documentação OpenAPI (arquivo): `resources/swagger.json` (UI disponível em `/api-docs`).
 
 Principais endpoints
-- `POST /api/users` — criar usuário. Body: `nome`, `email`, `password`, `administrador`.
-- `POST /api/users/login` — autenticar usuário. Body: `email`, `password`. Retorna `{ authorization: "<jwt>" }`.
-- `POST /api/products` — criar produto (protegido). Body: `nome`, `preco`, `descricao`, `quantidade`.
-- `GET /api/products` — listar produtos.
-- `GET /api/products/:id` — obter produto por id.
-- `PUT /api/products/:id` — atualizar produto (protegido).
-- `DELETE /api/products/:id` — deletar produto (protegido).
+- `POST /api/users` — Criar usuário
+  - Body JSON: `{ nome, email, password, administrador }`
+- `POST /api/users/login` — Autenticar usuário
+  - Body JSON: `{ email, password }`
+  - Resposta: `{ authorization: "<jwt>" }`
+- `POST /api/products` — Criar produto (protegido)
+  - Body JSON: `{ nome, preco, descricao, quantidade }`
+- `GET /api/products` — Listar produtos
+- `GET /api/products/:id` — Obter produto por id
+- `PUT /api/products/:id` — Atualizar produto (protegido)
+- `DELETE /api/products/:id` — Deletar produto (protegido)
 
 Autenticação
-- A API usa JWT para autenticação. O token é retornado pelo login e deve ser enviado no header `Authorization` como `Bearer <token>` para endpoints protegidos.
+- O login retorna um token JWT que deve ser enviado no header `Authorization` como `Bearer <token>` para os endpoints protegidos. O middleware valida o token e anexa `req.user` com o payload.
 
-Validações relevantes
-- `preco` deve ser número maior que zero (status 422 quando inválido).
-- `quantidade` deve ser número maior ou igual a zero.
-- Requisições com payloads faltando campos obrigatórios retornam `400`.
+Validações implementadas
+- `preco` deve ser número maior que zero — retorna `422` se inválido.
+- `quantidade` deve ser número >= 0 — retorna `422` se inválido.
+- Campos obrigatórios ausentes retornam `400`.
 
-Documentação Swagger
-- O arquivo OpenAPI está em `resources/swagger.json` e descreve modelos JSON de resposta e códigos de erro implementados.
-- A documentação interativa está disponível em: `http://localhost:3000/api-docs` quando o servidor estiver rodando.
+Documentação
+- Arquivo OpenAPI: `resources/swagger.json` — descreve modelos JSON de request/response e os status de erro implementados.
+- Swagger UI (interativo): `http://localhost:3000/api-docs` quando o servidor estiver rodando.
 
-Execução local
+Como executar
+1. Instale dependências:
 
 ```bash
 npm install
-npm run dev    # modo desenvolvimento (nodemon)
-# ou
-npm start      # inicia com node
 ```
 
-Testes e cobertura
-- Testes automatizados: Vitest + Supertest. Scripts:
+2. Em modo desenvolvimento (com reload):
+
+```bash
+npm run dev
+```
+
+3. Em produção/local: 
+
+```bash
+npm start
+```
+
+Testes automatizados
+- Test runner: Vitest + Supertest (integração HTTP): os testes estão em `tests/`.
+- Comandos:
   - `npm test` ou `npx vitest run` — executa os testes
   - `npm run test:coverage` — executa testes e gera relatório de cobertura (V8)
-- Após rodar cobertura, o relatório fica disponível no diretório `coverage/`.
 
-Estrutura de pastas (importante)
-- `src/index.js` — ponto de entrada (monta rotas e Swagger UI)
-- `src/api/routes/` — definição de rotas
-- `src/api/controllers/` — regras de endpoint
-- `src/api/services/` — lógica e armazenamento em memória
-- `src/api/models/` — modelos/factories de objetos
-- `src/api/middlewares/` — middleware de autenticação JWT
+Relatório de cobertura
+- Após `npm run test:coverage` o relatório é gerado (V8) e o diretório `coverage/` contém os artefatos.
+
+Estrutura do projeto
+- `src/index.js` — entrypoint que monta rotas e Swagger UI
+- `src/api/routes/` — rotas express
+- `src/api/controllers/` — handlers e respostas HTTP
+- `src/api/services/` — lógica de negócio e armazenamento em memória
+- `src/api/models/` — fábricas de objetos
+- `src/api/middlewares/` — middleware JWT (`authMiddleware.js`)
 - `resources/swagger.json` — especificação OpenAPI (arquivo)
-- `tests/` — testes automatizados
+- `tests/` — casos de teste automatizados
 
-Observações
-- Este projeto é intencionalmente simples e mantém os dados em memória para facilitar testes; não é adequado para produção sem substituir o armazenamento por um banco persistente e ajustar o segredo JWT (`JWT_SECRET`).
+Notas importantes
+- O projeto usa armazenamento em memória; para produção, substitua por banco persistente.
+- Ajuste a variável de ambiente `JWT_SECRET` em ambientes reais (não usar o segredo padrão).
 
-Suporte e contribuições
-- Para executar localmente, siga os passos em "Execução local".
-- Para problemas, abra uma issue neste repositório.
+Contribuições e suporte
+- Para contribuições, abra um PR. Para problemas, abra uma issue no repositório.
+
 # ppp-KiviaDantas
 
 Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.
