@@ -204,6 +204,69 @@ Kívia Dantas
 
 Se desejar, eu posso gerar uma coleção Postman/Insomnia com exemplos completos (criação de usuário, login e fluxo de produto) ou adicionar um diretório `docs/requests.md` com exemplos `curl`/HTTPie. Informe qual formato prefere e eu gero automaticamente.
 
+**Mapa Mental**
+
+```mermaid
+mindmap
+  root((API Test Suite))
+    Arquitetura
+      src
+        routes
+        controllers
+        services
+        models
+        middlewares
+    Dados
+      In-memory DB
+      Arrays + incremental IDs
+    Autenticação
+      JWT
+      authMiddleware.js
+    Documentação
+      resources/swagger.json
+      /api-docs
+    Testes
+      Vitest
+      Supertest
+      Coverage
+    Fluxos
+      Usuário --> Login --> Token --> Operações Protegidas
+```
+
+**Arquitetura Detalhada**
+
+- **Camada de Rotas (`src/api/routes/`)**: define endpoints por recurso e conecta os requests aos controllers. É a camada de entrada HTTP e deve permanecer mínima (apenas roteamento e validação de rota).
+
+- **Controllers (`src/api/controllers/`)**: atuam como orquestradores — recebem o request, validam parâmetros básicos, chamam os services e formatam a resposta HTTP (status codes, corpo JSON). Mantê-los sem lógica de negócio complexa facilita testes.
+
+- **Services (`src/api/services/`)**: contém a lógica de negócio e regras de validação mais específicas. No projeto atual, também hospedam o armazenamento em memória (arrays com ids incrementais). Ao migrar para DB, essa camada é o principal ponto de substituição.
+
+- **Models (`src/api/models/`)**: fábricas e formatos de objetos (usuário, produto). Padronizam shape dos objetos usados por services e controllers.
+
+- **Middlewares (`src/api/middlewares/`)**: funções transversais como `authMiddleware.js` (validação de JWT e injeção de `req.user`), tratamento de erros e logs. Middlewares garantem separação de responsabilidades e reuso.
+
+- **Documentação (`resources/swagger.json` + `swagger-ui-express`)**: arquivo OpenAPI que descreve modelos e respostas de erro; servido em `/api-docs` para consumo humano e como contrato leve para integrações.
+
+- **Testes (`tests/`)**: suíte de integração com `Vitest` + `Supertest` que consome o app exportado em `src/index.js`. `NODE_ENV=test` evita side-effects (listener de rede) durante os testes.
+
+- **Fluxo de Requisição (resumido)**:
+  1. Cliente envia requisição HTTP para um endpoint em `routes`.
+  2. Rota encaminha para o `controller` correspondente.
+  3. `Controller` faz validações básicas e chama o `service`.
+  4. `Service` aplica regras de negócio e persiste/consulta na store em memória.
+  5. `Controller` monta a resposta (status + JSON) e a middleware de erro trata falhas.
+
+- **Considerações para Produção**:
+  - Substituir armazenamento em memória por um banco persistente (ex.: PostgreSQL, MongoDB).
+  - Externalizar segredos (como `JWT_SECRET`) para variáveis de ambiente/secret manager.
+  - Adicionar validação de payload robusta (ex.: `ajv`/Joi), rate limiting, CORS, e logging estruturado.
+  - Incluir pipeline de CI para execução de testes e checagem de cobertura.
+
+---
+
+Se quiser, atualizo o `README.md` com diagramas de sequência ou uma coleção Postman exportada — qual formato prefere?  
+
+
 
 Resultado esperado: cadastro com sucesso
 
