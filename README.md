@@ -102,6 +102,174 @@ Notas importantes
 Contribuições e suporte
 - Para contribuições, abra um PR. Para problemas, abra uma issue no repositório.
 
+---
+
+## README (detalhado)
+
+Este documento descreve como configurar, executar, testar e inspecionar o projeto `ppp-KiviaDantas` de forma profissional.
+
+### Sumário
+- Visão geral
+- Requisitos
+- Instalação
+- Variáveis de ambiente
+- Scripts úteis
+- Como executar a API
+- Endpoints principais (exemplos)
+- Autenticação JWT
+- Testes e cobertura
+- Estrutura do projeto
+- Boas práticas e notas de segurança
+- Contato / Contribuição
+
+### Requisitos
+- Node.js >= 18 (recomendado)
+- npm >= 9 (ou yarn)
+
+### Instalação
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/kiviachristina/ppp-KiviaDantas.git
+cd ppp-KiviaDantas
+```
+
+2. Instale dependências:
+
+```bash
+npm install
+```
+
+### Variáveis de ambiente
+Recomenda-se definir as seguintes variáveis em um arquivo `.env` ou no ambiente de execução:
+
+- `PORT` — porta onde o servidor irá rodar (padrão: `3000`).
+- `JWT_SECRET` — segredo usado para assinar tokens JWT (mude para um valor forte em produção).
+
+Exemplo `env` mínimo (não commit):
+
+```env
+PORT=3000
+JWT_SECRET=uma_chave_forte_aqui
+```
+
+### Scripts úteis (package.json)
+- `npm start` — inicia a aplicação com `node` (produção/local).
+- `npm run dev` — inicia em modo desenvolvimento (nodemon).
+- `npm test` — executa a suíte de testes (Vitest).
+- `npm run test:coverage` — executa testes e gera relatório de cobertura (V8).
+
+### Executando a API
+1. Configure `JWT_SECRET` no ambiente (recomendado).
+2. Inicie em modo desenvolvimento:
+
+```bash
+npm run dev
+```
+
+3. A API estará disponível por padrão em `http://localhost:3000`.
+4. A documentação interativa Swagger UI está disponível em:
+
+```
+http://localhost:3000/api-docs
+```
+
+### Endpoints principais (resumo e exemplos)
+Todos os exemplos usam `curl` — ajuste `PORT` se necessário.
+
+1) Criar usuário
+
+```bash
+curl -X POST http://localhost:3000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"QA User","email":"qa@example.test","password":"senha123","administrador":true}'
+```
+
+Resposta (201):
+{
+  "message": "Cadastro realizado com sucesso",
+  "user": { "id": 1, "nome": "QA User", "email": "qa@example.test", ... }
+}
+
+2) Login (recebe JWT)
+
+```bash
+curl -X POST http://localhost:3000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"qa@example.test","password":"senha123"}'
+```
+
+Resposta (200):
+```
+{ "authorization": "<JWT_TOKEN_HERE>" }
+```
+
+3) Criar produto (protegido — Bearer token)
+
+```bash
+curl -X POST http://localhost:3000/api/products \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <JWT_TOKEN_HERE>" \
+  -d '{"nome":"Produto X","preco":10.5,"descricao":"descr","quantidade":3}'
+```
+
+Respostas relevantes:
+- `201` — cadastro realizado com sucesso, payload com `product`.
+- `400` — campos obrigatórios ausentes.
+- `422` — validação: `preco` ou `quantidade` inválidos.
+- `401` — token ausente ou inválido.
+
+4) Listar produtos
+
+```bash
+curl http://localhost:3000/api/products
+```
+
+5) Obter/Atualizar/Deletar produto por id
+
+```bash
+curl http://localhost:3000/api/products/1
+curl -X PUT http://localhost:3000/api/products/1 -H "Authorization: Bearer <JWT>" -d '{"preco":15}'
+curl -X DELETE http://localhost:3000/api/products/1 -H "Authorization: Bearer <JWT>"
+```
+
+### Autenticação JWT
+- O token é emitido por `POST /api/users/login` usando o segredo `JWT_SECRET`.
+- Envie pelo header `Authorization: Bearer <token>` nos endpoints protegidos.
+- O middleware `src/api/middlewares/authMiddleware.js` valida o token e anexa `req.user`.
+
+### Testes e cobertura
+- Testes: `tests/` (Vitest + Supertest). Execução:
+
+```bash
+npm test
+npm run test:coverage
+```
+
+- O relatório de cobertura é gerado em `coverage/` pelo Vitest (provider V8).
+
+### Estrutura do projeto
+- `src/index.js` — entrypoint (monta rotas e Swagger UI)
+- `src/api/routes/` — define endpoints
+- `src/api/controllers/` — implementa comportamento das rotas
+- `src/api/services/` — lógica de negócio + armazenamento em memória
+- `src/api/models/` — fábricas/estruturas de dados
+- `src/api/middlewares/` — middleware JWT
+- `resources/swagger.json` — especificação OpenAPI (arquivo)
+- `tests/` — testes automatizados
+
+### Boas práticas e segurança
+- Nunca commit o segredo JWT (`JWT_SECRET`) no repositório. Use variáveis de ambiente ou um secret manager.
+- Em produção, substitua o banco em memória por um banco persistente (Postgres, MongoDB, etc.).
+- Valide e sanitize entradas para evitar injeção e problemas de segurança.
+
+### Contribuição
+- Fork → branch → PR. Inclua testes para novas features/bugs.
+
+### Licença
+- Verifique o arquivo `LICENSE` no repositório para os termos de uso.
+
+
 # ppp-KiviaDantas
 
 Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.
