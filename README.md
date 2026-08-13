@@ -134,8 +134,6 @@ Observações de segurança:
 
 Kívia Dantas
 
----
-Se precisar, posso também gerar uma coleção Postman/Insomnia com exemplos de requisições ou adicionar exemplos de uso no diretório `docs/`.
 
 ---
 
@@ -222,5 +220,3 @@ npm run test:coverage
 
 ---
 
-Se desejar, posso gerar uma coleção Postman/Insomnia com todos os exemplos de requisições e tokens de exemplo para uso manual/visual. Também posso criar templates de testes (boilerplate) para acelerar a escrita de novos casos.
->>>>>>> af4439f (Docs: add Wiki section focused on QA and test strategy to README)
