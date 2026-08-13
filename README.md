@@ -1,3 +1,30 @@
+# PPP KiviaDantas - E-Commerce API (In-Memory)
+
+Este projeto fornece uma API REST simples em memória para suportar uma suíte de testes de regras de negócio e casos de borda (API e-Commerce).
+
+Principais pontos:
+- Estrutura em camadas: `routes`, `controllers`, `services`, `models`.
+- Dados armazenados em memória (arrays) — adequado para testes.
+- Documentação Swagger em `resources/swagger.json` e interface exibida em `/api-docs`.
+- Endpoints principais:
+  - `POST /api/users` — criar usuário
+  - `POST /api/users/login` — autenticar (retorna `authorization` token)
+  - `POST /api/products` — criar produto (requer header `Authorization`)
+  - `GET /api/products` — listar produtos
+  - `GET /api/products/:id` — obter produto por id
+  - `PUT /api/products/:id` — atualizar produto (requer `Authorization`)
+  - `DELETE /api/products/:id` — deletar produto (requer `Authorization`)
+
+Rodando localmente:
+
+```bash
+npm install
+npm run dev   # inicia em modo desenvolvimento com nodemon
+# ou
+npm start     # inicia com node
+```
+
+Abra a documentação interativa em: `http://localhost:3000/api-docs`
 # ppp-KiviaDantas
 
 Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.

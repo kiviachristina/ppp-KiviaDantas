@@ -4,8 +4,11 @@
   "description": "Projeto de portfólio para automação de testes de API e-commerce com foco em regras de negócio e casos de borda",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -25,7 +28,14 @@
     "url": "https://github.com/kiviachristin-cell/ppp-KiviaDantas/issues"
   },
   "homepage": "https://github.com/kiviachristin-cell/ppp-KiviaDantas#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "swagger-ui-express": "^4.6.3"
+  },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.10",
+    "nodemon": "^2.0.22",
+    "supertest": "^6.3.3",
     "vitest": "^4.1.10"
   }
 }
