@@ -1,14 +1,7 @@
 import * as productService from '../services/productService.js';
 
-function requireAuth(req) {
-  const auth = req.headers.authorization;
-  if (!auth) throw { status: 401, message: 'Missing authorization' };
-  return auth;
-}
-
 export async function createProduct(req, res) {
   try {
-    try { requireAuth(req); } catch (e) { return res.status(e.status).json({ message: e.message }); }
     const { nome, preco, descricao, quantidade } = req.body;
     if (!nome || preco == null || !descricao || quantidade == null) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -47,7 +40,6 @@ export async function getProductById(req, res) {
 
 export async function updateProduct(req, res) {
   try {
-    try { requireAuth(req); } catch (e) { return res.status(e.status).json({ message: e.message }); }
     const id = Number(req.params.id);
     const changes = req.body;
     const updated = productService.updateProduct(id, changes);
@@ -60,7 +52,6 @@ export async function updateProduct(req, res) {
 
 export async function deleteProduct(req, res) {
   try {
-    try { requireAuth(req); } catch (e) { return res.status(e.status).json({ message: e.message }); }
     const id = Number(req.params.id);
     const ok = productService.deleteProduct(id);
     if (!ok) return res.status(404).json({ message: 'Product not found' });

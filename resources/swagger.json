@@ -46,6 +46,7 @@
     "/api/products": {
       "post": {
         "summary": "Create product (requires Authorization header)",
+        "security": [{ "bearerAuth": [] }],
         "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProductCreate" } } } },
         "responses": {
           "201": { "description": "Product created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProductCreateResponse" } } } },
@@ -72,6 +73,7 @@
       },
       "put": {
         "summary": "Update product (requires Authorization header)",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
         "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ProductUpdate" } } } },
         "responses": {
@@ -82,6 +84,7 @@
       },
       "delete": {
         "summary": "Delete product (requires Authorization header)",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }],
         "responses": {
           "200": { "description": "Deleted", "content": { "application/json": { "schema": { "type": "object", "properties": { "message": { "type": "string" } } } } } },
@@ -92,6 +95,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "UserCreate": {
         "type": "object",
