@@ -1,10 +1,10 @@
-# 📌 PPP KiviaDantas — Automação de Testes de API (Node.js, Express, Vitest, Swagger)
+# PPP KiviaDantas — Automação de Testes de API (Node.js, Express, Vitest, Swagger)
 
 Projeto de portfólio voltado a automação de testes de APIs e validação de regras de negócio e casos de borda. Implementa uma API REST em memória (simulada) que serve como alvo para uma suíte de testes automatizados escrita com Vitest e Supertest. A API fornece endpoints de gerenciamento de usuários e produtos, possui documentação OpenAPI (Swagger) e autenticação por JWT.
 
 ---
 
-## 🛠️ Tecnologias e Dependências Utilizadas
+## Tecnologias e Dependências Utilizadas
 
 - Node.js (ES Modules)
 - Express (servidor HTTP)
@@ -18,7 +18,7 @@ Dependências estão listadas em `package.json`.
 
 ---
 
-## 🏗️ Arquitetura e Estrutura de Pastas
+## Arquitetura e Estrutura de Pastas
 
 O projeto segue uma organização em camadas para facilitar manutenção e testes:
 
@@ -35,7 +35,7 @@ Essa estrutura separa responsabilidades e facilita a criação de testes unitár
 
 ---
 
-## ⚙️ Pré-requisitos
+## Pré-requisitos
 
 - Node.js v18+ (recomendado)
 - npm v9+ (ou gerenciador de pacotes compatível)
@@ -49,7 +49,7 @@ npm -v
 
 ---
 
-## 🚀 Passo a Passo de Instalação e Execução
+## Passo a Passo de Instalação e Execução
 
 1. Clone o repositório:
 
@@ -94,7 +94,7 @@ npm run dev
 
 ---
 
-## 🧪 Como Rodar a Suíte de Testes Automatizados
+## Como Rodar a Suíte de Testes Automatizados
 
 Testes implementados com Vitest e Supertest (integração HTTP).
 
@@ -116,7 +116,7 @@ O relatório de cobertura será gerado em `coverage/`.
 
 ---
 
-## 🔐 Segurança e Autenticação
+## Segurança e Autenticação
 
 A autenticação implementada utiliza JSON Web Tokens (JWT):
 
@@ -130,10 +130,9 @@ Observações de segurança:
 
 ---
 
-## 👤 Autora
+## Autora
 
 Kívia Dantas
 
 ---
 
-Se precisar, posso também gerar uma coleção Postman/Insomnia com exemplos de requisições ou adicionar exemplos de uso no diretório `docs/`.
