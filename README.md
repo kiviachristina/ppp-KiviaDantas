@@ -1,4 +1,4 @@
-# PPP KiviaDantas — Automação de Testes de API (Node.js, Express, Vitest, Swagger)
+# Automação de Testes de API (Node.js, Express, Vitest, Swagger)
 
 Projeto de portfólio voltado a automação de testes de APIs e validação de regras de negócio e casos de borda. Implementa uma API REST em memória (simulada) que serve como alvo para uma suíte de testes automatizados escrita com Vitest e Supertest. A API fornece endpoints de gerenciamento de usuários e produtos, possui documentação OpenAPI (Swagger) e autenticação por JWT.
 
