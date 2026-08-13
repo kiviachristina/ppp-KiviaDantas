@@ -1,144 +1,213 @@
-# ppp-KiviaDantas
+ # 📌 Automação de Testes de API — PPP KiviaDantas
 
-Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.
+Projeto de portfólio focado em automação e validação de APIs (E‑Commerce). A solução implementa uma API REST em memória (para fins de teste), uma suíte de testes automatizados com Vitest + Supertest e documentação OpenAPI (Swagger). A API foi construída em Node.js usando Express e utiliza JWT para autenticação dos endpoints protegidos.
 
-## Visão geral
+---
 
-Este repositório tem como objetivo demonstrar a aplicação de conceitos fundamentais de testes de software em uma API real, com foco em robustez e qualidade. A automação foi desenvolvida utilizando a API pública ServeRest, que simula um ambiente de e-commerce e oferece um cenário ideal para praticar testes de API, validações e análise de comportamento em cenários fora do fluxo feliz.
+## 🛠️ Tecnologias e Dependências
 
-A suíte foi construída para validar:
+- Node.js (ES Modules)
+- Express
+- Vitest (test runner)
+- Supertest (integração HTTP nos testes)
+- jsonwebtoken (JWT)
+- swagger-ui-express (Swagger UI)
+- nodemon (desenvolvimento)
 
-- regras de negócio do cadastro de produtos
-- tratamento de valores inválidos
-- status codes esperados pela API
-- mensagens retornadas no corpo JSON
-- comportamento em casos de borda e cenários críticos
+As dependências estão descritas em `package.json`.
 
-## Objetivo do projeto
+---
 
-Aplicar técnicas de teste como:
+## 🏗️ Arquitetura e Estrutura de Pastas
 
-- Partição de equivalência
-- Valoração de limites
-- Casos de borda
-- Validação de respostas de erro
-- Verificação de contrato e regras de negócio da API
+Arquitetura organizada em camadas para clareza e testabilidade:
 
-## API utilizada
+- `src/index.js` — entrypoint; monta e exporta o app Express; registra o Swagger UI em `/api-docs`.
+- `src/api/routes/` — declara rotas por recurso (users, products).
+- `src/api/controllers/` — camada de orquestração de requisições (validação básica, mapping de respostas).
+- `src/api/services/` — lógica de negócio e armazenamento em memória (arrays) — ponto único para substituição por DB real.
+- `src/api/models/` — factories / shape dos objetos retornados.
+- `src/api/middlewares/` — middlewares, incluindo `authMiddleware.js` (JWT verification).
+- `resources/swagger.json` — especificação OpenAPI (arquivo estático usado pelo Swagger UI).
+- `tests/` — testes automatizados (Vitest + Supertest).
 
-- ServeRest: https://serverest.dev/
+Essa separação permite testes em nível de integração (testando o servidor real) e facilita a futura migração para persistência real.
 
-A API ServeRest foi escolhida por ser pública, gratuita e amplamente usada em treinamentos de QA para testes de API, especialmente em cenários de e-commerce.
+---
 
-## Stack tecnológica
+## ⚙️ Pré-requisitos
 
-- Node.js
-- Vitest
-- JavaScript
-- Fetch API nativa
+- Node.js v18 ou superior (recomendado)
+- npm v9 ou superior
 
-## Requisitos mapeados
+Verifique as versões:
 
-Os testes automatizados cobrem os seguintes requisitos:
-
-- RQ-01: O cadastro de produto deve aceitar somente payloads válidos
-- RQ-02: O campo preco deve rejeitar valores zero e negativos
-- RQ-03: O campo nome deve ser obrigatório
-- RQ-04: A API deve responder com status HTTP de erro quando houver dados inválidos
-- RQ-05: A API deve retornar mensagens claras no corpo da resposta
-- RQ-06: O backend atual não aplica regra de limite de tamanho específico para o nome do produto
-
-## Matriz de rastreabilidade de testes
-
-| Requisito da API | Cenário coberto | Resultado esperado | Status |
-| --- | --- | --- | --- |
-| RQ-01 | Cadastro de produto válido | Status 201 e mensagem de sucesso | Coberto |
-| RQ-02 | Preço zerado | 400 com mensagem indicando problema em preço | Coberto |
-| RQ-02 | Preço negativo | 400 com mensagem indicando problema em preço | Coberto |
-| RQ-03 | Payload sem nome e sem preço | 400 com erro específico do campo obrigatório | Coberto |
-| RQ-04 | Verificação de status HTTP | 400 ou 422 em caso de payload inválido | Coberto |
-| RQ-05 | Verificação da mensagem de erro | Corpo JSON com descrição do problema | Coberto |
-| RQ-06 | Nome de produto muito longo | Cadastro é aceito no backend atual, sem regra de limite | Coberto |
-
-## Estrutura do projeto
-
-```text
-ppp-KiviaDantas/
-├── README.md
-├── package.json
-├── package-lock.json
-├── src/
-│   └── api/
-│       └── serverest.js
-└── tests/
-    └── business-rules.spec.js
+```bash
+node -v
+npm -v
 ```
 
-### Descrição dos arquivos
+---
 
-- `README.md`: documentação do projeto, requisitos e instruções de uso
-- `package.json`: configuração do projeto e scripts
-- `src/api/serverest.js`: cliente HTTP para consumir os endpoints da API
-- `tests/business-rules.spec.js`: suíte de testes automatizados
+## 🚀 Instalação e Execução Local
 
-## Pré-requisitos
-
-Antes de rodar o projeto, certifique-se de ter instalado:
-
-- Node.js 18 ou superior
-- npm
-- Git
-
-## Instalação
-
-1. Clone o repositório:
+1. Clone o repositório e acesse a pasta:
 
 ```bash
 git clone https://github.com/kiviachristina/ppp-KiviaDantas.git
 cd ppp-KiviaDantas
 ```
 
-2. Instale as dependências:
+2. Instale dependências:
 
 ```bash
 npm install
 ```
 
-## Execução dos testes
+3. Variáveis de ambiente (opcional — recomendado):
 
-Para rodar a suíte completa:
+Defina `JWT_SECRET` e `PORT` (padrão 3000) via `.env` ou no ambiente:
+
+```env
+PORT=3000
+JWT_SECRET=uma_chave_forte_aqui
+```
+
+4. Executar o servidor:
+
+- Modo produção/local (sem reload):
 
 ```bash
+node src/index.js
+```
+
+- Modo desenvolvimento (recarregamento automático com nodemon):
+
+```bash
+npm run dev
+```
+
+5. Acesse a documentação interativa (Swagger UI):
+
+```
+http://localhost:3000/api-docs
+```
+
+---
+
+## 🧪 Testes Automatizados
+
+A suíte de testes usa Vitest e Supertest para validar os fluxos de negócio contra o app Express exportado (`src/index.js`).
+
+- Executar toda a suíte:
+
+```bash
+npx vitest run
+# ou
 npm test
 ```
 
-Para executar em modo interativo durante o desenvolvimento:
+- Gerar relatório de cobertura (provider V8):
 
 ```bash
-npm run test:watch
+npm run test:coverage
 ```
 
-## Como funciona a automação
+O relatório será gerado em `coverage/`.
 
-A suíte realiza os seguintes passos:
+Observações de teste:
+- Os testes criam dados dinamicamente (e-mails, nomes) para evitar colisões.
+- O `NODE_ENV` é definido como `test` durante os testes para evitar que o servidor inicie o listener de rede.
 
-1. Cria um usuário administrador na API
-2. Realiza login com as credenciais do usuário
-3. Gera um token de autenticação
-4. Envia payloads válidos e inválidos para o endpoint de produtos
-5. Valida o status HTTP e a mensagem no JSON da resposta
-6. Confirma se o comportamento da API está alinhado com as regras esperadas
+---
 
-## Casos cobertos pela automação
+## 🔐 Autenticação e Segurança
 
-### 1. Produto válido
-- nome adequado
-- preço numérico positivo
-- descrição presente
-- quantidade válida
+- O projeto usa JWT para autenticação.
+- Fluxo:
+  1. `POST /api/users` — cria usuário (retorna objeto de usuário).
+  2. `POST /api/users/login` — valida credenciais e retorna `{ authorization: "<JWT>" }`.
+  3. Envie `Authorization: Bearer <JWT>` nos endpoints protegidos (`POST/PUT/DELETE /api/products`).
+
+- Implementação:
+  - `src/api/services/userService.js` emite o token com `jsonwebtoken` (expiração 1h, assinatura via `JWT_SECRET`).
+  - `src/api/middlewares/authMiddleware.js` valida o token e injeta `req.user` com o payload.
+
+Recomendações de segurança:
+- Nunca commit `JWT_SECRET` em repositórios públicos; use ambiente seguro ou secret manager.
+- Em produção, substitua armazenamento em memória por banco persistente e aplique validações adicionais, rate limiting e CORS apropriado.
+
+---
+
+## Endpoints principais (resumo)
+
+- `POST /api/users` — criar usuário
+- `POST /api/users/login` — login (retorna JWT)
+- `POST /api/products` — criar produto (protegido)
+- `GET /api/products` — listar produtos
+- `GET /api/products/:id` — obter produto por id
+- `PUT /api/products/:id` — atualizar produto (protegido)
+- `DELETE /api/products/:id` — deletar produto (protegido)
+
+Validações implementadas (exemplos):
+- `preco` deve ser número maior que 0 (retorna 422 se inválido)
+- `quantidade` deve ser número >= 0
+- Campos obrigatórios ausentes retornam 400
+
+Para detalhes completos das respostas e modelos JSON, consulte `resources/swagger.json` ou a UI em `/api-docs`.
+
+---
+
+## 🧾 Wiki — Guia de Testes (foco QA)
+
+Breve guia para profissionais de QA sobre como trabalhar e expandir a suíte de testes.
+
+### Objetivos dos testes
+- Verificar regras de negócio e casos de borda.
+- Garantir integridade em cenários de autenticação e CRUD de produtos.
+
+### Estratégia e boas práticas
+- Escrever testes idempotentes e independentes.
+- Preferir dados gerados dinamicamente (timestamps, random) em vez de valores estáticos.
+- Testar comportamento observável (status codes, schema JSON, mensagens), não detalhes internos.
+
+### Como adicionar casos de teste
+1. Criar `tests/novo-caso.spec.js`.
+2. Usar `supertest` com `app` importado de `src/index.js`.
+3. Preparar dados, executar fluxo (ex.: criar usuário, login, usar token) e validar respostas.
+
+Exemplo mínimo:
+
+```js
+import request from 'supertest';
+import app from '../src/index.js';
+import { describe, it, expect } from 'vitest';
+
+describe('Smoke', () => {
+  it('GET /api/products => 200', async () => {
+    const res = await request(app).get('/api/products');
+    expect(res.status).toBe(200);
+  });
+});
+```
+
+### Cobertura e CI
+- Execute `npm run test:coverage` e adicione checagens no CI (ex.: GitHub Actions) para garantir coverage mínimo.
+
+---
+
+## 👤 Autora
+
+Kívia Dantas
+
+---
+
+Se desejar, eu posso gerar uma coleção Postman/Insomnia com exemplos completos (criação de usuário, login e fluxo de produto) ou adicionar um diretório `docs/requests.md` com exemplos `curl`/HTTPie. Informe qual formato prefere e eu gero automaticamente.
+
 
 Resultado esperado: cadastro com sucesso
 
+<<<<<<< HEAD
 ### 2. Preço zerado
 - payload com `preco: 0`
 
@@ -202,3 +271,12 @@ Kivia Dantas
 ## Licença
 
 Este projeto está sob a licença ISC.
+=======
+## 👤 Autora
+
+Kívia Dantas
+
+---
+
+Se desejar, eu posso gerar uma coleção Postman/Insomnia com exemplos completos (criação de usuário, login e fluxo de produto) ou adicionar um diretório `docs/requests.md` com exemplos `curl`/HTTPie. Informe qual formato prefere e eu gero automaticamente.
+>>>>>>> 9b850a6 (Docs: replace README with comprehensive professional guide and QA wiki)
