@@ -1,10 +1,10 @@
-# 📌 Automação de Testes de API — PPP KiviaDantas
+# Automação de Testes de API — PPP KiviaDantas
  
 Projeto de portfólio focado em automação e validação de APIs (E‑Commerce). A solução implementa uma API REST em memória (para fins de teste), uma suíte de testes automatizados com Vitest + Supertest e documentação OpenAPI (Swagger). A API foi construída em Node.js usando Express e utiliza JWT para autenticação dos endpoints protegidos.
  
 ---
  
-## 🛠️ Tecnologias e Dependências
+## Tecnologias e Dependências
  
 - Node.js (ES Modules)
 - Express
@@ -18,7 +18,7 @@ As dependências estão descritas em `package.json`.
  
 ---
  
-## 🏗️ Arquitetura e Estrutura de Pastas
+## Arquitetura e Estrutura de Pastas
  
 Arquitetura organizada em camadas para clareza e testabilidade:
  
@@ -35,7 +35,7 @@ Essa separação permite testes em nível de integração (testando o servidor r
  
 ---
  
-## ⚙️ Pré-requisitos
+## Pré-requisitos
  
 - Node.js v18 ou superior (recomendado)
 - npm v9 ou superior
@@ -49,7 +49,7 @@ npm -v
  
 ---
  
-## 🚀 Instalação e Execução Local
+## Instalação e Execução Local
  
 1. Clone o repositório e acesse a pasta:
  
@@ -95,7 +95,7 @@ http://localhost:3000/api-docs
  
 ---
  
-## 🧪 Testes Automatizados
+## Testes Automatizados
  
 A suíte de testes usa Vitest e Supertest para validar os fluxos de negócio contra o app Express exportado (`src/index.js`).
  
@@ -121,7 +121,7 @@ Observações de teste:
  
 ---
  
-## 🔐 Autenticação e Segurança
+## Autenticação e Segurança
  
 - O projeto usa JWT para autenticação.
 - Fluxo:
@@ -158,7 +158,7 @@ Para detalhes completos das respostas e modelos JSON, consulte `resources/swagge
  
 ---
  
-## 🧾 Wiki — Guia de Testes (foco QA)
+## Wiki — Guia de Testes (foco QA)
  
 Breve guia para profissionais de QA sobre como trabalhar e expandir a suíte de testes.
  
@@ -194,15 +194,6 @@ describe('Smoke', () => {
 ### Cobertura e CI
 - Execute `npm run test:coverage` e adicione checagens no CI (ex.: GitHub Actions) para garantir coverage mínimo.
  
----
- 
-## 👤 Autora
- 
-Kívia Dantas
- 
----
- 
-Se desejar, eu posso gerar uma coleção Postman/Insomnia com exemplos completos (criação de usuário, login e fluxo de produto) ou adicionar um diretório `docs/requests.md` com exemplos `curl`/HTTPie. Informe qual formato prefere e eu gero automaticamente.
  
 **Mapa Mental**
  
