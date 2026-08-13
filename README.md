@@ -11,7 +11,107 @@ Principais pontos:
   - `PUT /api/products/:id` — atualizar produto (requer `Authorization`)
   - `DELETE /api/products/:id` — deletar produto (requer `Authorization`)
 
-Rodando localmente:
+📌 Nome do Projeto e Breve Descrição
+
+PPP KiviaDantas — E-Commerce API (In-Memory)
+
+API REST em memória desenvolvida como projeto de portfólio para testes de qualidade (QA) de APIs. Implementada em Node.js com foco em facilitar a automação de testes de regras de negócio e casos de borda.
+
+🚀 Tecnologias Utilizadas
+
+- Node.js
+- Express
+- Vitest (test runner)
+- Supertest (integração HTTP nos testes)
+- JSON Web Token (JWT) para autenticação
+- swagger-ui-express + arquivo OpenAPI (`resources/swagger.json`)
+- nodemon (desenvolvimento)
+
+🏗️ Arquitetura do Projeto
+
+O projeto segue uma arquitetura em camadas para separar responsabilidades:
+
+- `routes` — define endpoints e aplica middlewares (arquivo: `src/api/routes/`).
+- `controllers` — recebe requisições, valida e retorna respostas HTTP (arquivo: `src/api/controllers/`).
+- `services` — contém a lógica de negócio e o armazenamento em memória (arquivo: `src/api/services/`).
+- `models` — fábricas/estruturas de dados para respostas e armazenamento (arquivo: `src/api/models/`).
+- `middlewares` — middlewares reutilizáveis, incluindo autenticação JWT (`src/api/middlewares/authMiddleware.js`).
+
+⚙️ Pré-requisitos
+
+- Node.js >= 18 (recomendado)
+- npm >= 9
+
+📦 Passo a Passo de Instalação e Execução Local
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/kiviachristina/ppp-KiviaDantas.git
+cd ppp-KiviaDantas
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+```
+
+3. Rodar o servidor (modo local/prod):
+
+```bash
+node src/index.js
+```
+
+Ou em modo desenvolvimento (recarregamento automático):
+
+```bash
+npm run dev
+```
+
+4. Documentação Swagger (UI):
+
+Abra no navegador:
+
+```
+http://localhost:3000/api-docs
+```
+
+🧪 Como Rodar a Suíte de Testes Automatizados
+
+- Executar testes (Vitest):
+
+```bash
+npx vitest run
+# ou
+npm test
+```
+
+- Gerar relatório de cobertura (V8 provider):
+
+```bash
+npm run test:coverage
+```
+
+O relatório é gerado no diretório `coverage/`.
+
+🔐 Autenticação e Segurança
+
+- A API utiliza JWT para autenticação.
+- O endpoint `POST /api/users/login` retorna um token JWT (`{ authorization: "<token>" }`).
+- Endpoints protegidos (ex.: criação/alteração/exclusão de produtos) exigem o header:
+
+```
+Authorization: Bearer <TOKEN>
+```
+
+- O middleware `src/api/middlewares/authMiddleware.js` valida o token usando a variável de ambiente `JWT_SECRET` (ou um valor padrão em desenvolvimento). Em caso de token ausente ou inválido, retorna `401 Unauthorized`.
+
+📄 Licença e Autor
+
+Autor: Kívia Dantas
+
+Licença: ver arquivo `LICENSE` no repositório.
 
 ```bash
 npm install
