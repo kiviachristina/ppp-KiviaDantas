@@ -3,10 +3,6 @@
 Este projeto fornece uma API REST simples em memória para suportar uma suíte de testes de regras de negócio e casos de borda (API e-Commerce).
 
 Principais pontos:
-- Estrutura em camadas: `routes`, `controllers`, `services`, `models`.
-- Dados armazenados em memória (arrays) — adequado para testes.
-- Documentação Swagger em `resources/swagger.json` e interface exibida em `/api-docs`.
-- Endpoints principais:
   - `POST /api/users` — criar usuário
   - `POST /api/users/login` — autenticar (retorna `authorization` token)
   - `POST /api/products` — criar produto (requer header `Authorization`)
@@ -25,6 +21,68 @@ npm start     # inicia com node
 ```
 
 Abra a documentação interativa em: `http://localhost:3000/api-docs`
+# PPP KiviaDantas - E-Commerce API (In-Memory)
+
+API REST em memória construída para servir como base de uma suíte de testes de regras de negócio e casos de borda.
+
+Resumo do projeto
+- **Arquitetura:** separada em camadas: `routes`, `controllers`, `services`, `models`.
+- **Persistência:** banco em memória (arrays) dentro das services — ideal para testes automatizados.
+- **Framework:** construída com `express`.
+- **Documentação:** arquivo Swagger em `resources/swagger.json` e UI em `/api-docs`.
+
+Principais endpoints
+- `POST /api/users` — criar usuário. Body: `nome`, `email`, `password`, `administrador`.
+- `POST /api/users/login` — autenticar usuário. Body: `email`, `password`. Retorna `{ authorization: "<jwt>" }`.
+- `POST /api/products` — criar produto (protegido). Body: `nome`, `preco`, `descricao`, `quantidade`.
+- `GET /api/products` — listar produtos.
+- `GET /api/products/:id` — obter produto por id.
+- `PUT /api/products/:id` — atualizar produto (protegido).
+- `DELETE /api/products/:id` — deletar produto (protegido).
+
+Autenticação
+- A API usa JWT para autenticação. O token é retornado pelo login e deve ser enviado no header `Authorization` como `Bearer <token>` para endpoints protegidos.
+
+Validações relevantes
+- `preco` deve ser número maior que zero (status 422 quando inválido).
+- `quantidade` deve ser número maior ou igual a zero.
+- Requisições com payloads faltando campos obrigatórios retornam `400`.
+
+Documentação Swagger
+- O arquivo OpenAPI está em `resources/swagger.json` e descreve modelos JSON de resposta e códigos de erro implementados.
+- A documentação interativa está disponível em: `http://localhost:3000/api-docs` quando o servidor estiver rodando.
+
+Execução local
+
+```bash
+npm install
+npm run dev    # modo desenvolvimento (nodemon)
+# ou
+npm start      # inicia com node
+```
+
+Testes e cobertura
+- Testes automatizados: Vitest + Supertest. Scripts:
+  - `npm test` ou `npx vitest run` — executa os testes
+  - `npm run test:coverage` — executa testes e gera relatório de cobertura (V8)
+- Após rodar cobertura, o relatório fica disponível no diretório `coverage/`.
+
+Estrutura de pastas (importante)
+- `src/index.js` — ponto de entrada (monta rotas e Swagger UI)
+- `src/api/routes/` — definição de rotas
+- `src/api/controllers/` — regras de endpoint
+- `src/api/services/` — lógica e armazenamento em memória
+- `src/api/models/` — modelos/factories de objetos
+- `src/api/middlewares/` — middleware de autenticação JWT
+- `resources/swagger.json` — especificação OpenAPI (arquivo)
+- `tests/` — testes automatizados
+
+Observações
+- Este projeto é intencionalmente simples e mantém os dados em memória para facilitar testes; não é adequado para produção sem substituir o armazenamento por um banco persistente e ajustar o segredo JWT (`JWT_SECRET`).
+
+Suporte e contribuições
+- Para executar localmente, siga os passos em "Execução local".
+- Para problemas, abra uma issue neste repositório.
 # ppp-KiviaDantas
 
 Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.
