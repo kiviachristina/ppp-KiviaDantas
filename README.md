@@ -135,4 +135,92 @@ Observações de segurança:
 Kívia Dantas
 
 ---
+Se precisar, posso também gerar uma coleção Postman/Insomnia com exemplos de requisições ou adicionar exemplos de uso no diretório `docs/`.
 
+---
+
+## 🧾 Wiki — Guia de Testes (foco QA)
+
+Esta seção funciona como uma mini-wiki focada na atividade de QA: como os testes foram organizados, a estratégia adotada, diretrizes para escrever novos testes e como interpretar relatórios de cobertura.
+
+### 1) Objetivo dos testes
+- Validar regras de negócio e casos de borda da API E-Commerce.
+- Garantir comportamento esperado em criação/autenticação de usuários e operações CRUD de produtos.
+
+### 2) Tipos de testes incluídos
+- Testes de integração HTTP (Vitest + Supertest): exercitam rotas reais da aplicação contra o app Express exportado (`src/index.js`).
+- Testes unitários podem ser adicionados na pasta `tests/` utilizando mocks nas services.
+
+### 3) Localização dos testes
+- Arquivos de teste: `tests/*.spec.js` (ex.: `tests/api.spec.js`, `tests/business-rules.spec.js`).
+
+### 4) Estratégia de escrita de testes
+- Priorizar regras de negócio e fluxos críticos (login, autorização, validação de payloads).
+- Cada teste deve ser independente e idempotente: use emails/produtos gerados dinamicamente para evitar colisões.
+- Preferir testar comportamentos (status codes, mensagens, shape do JSON) em vez de implementação interna.
+
+### 5) Como adicionar um novo teste (passo a passo)
+1. Criar arquivo `tests/novo-caso.spec.js`.
+2. Importar `request` do `supertest` ou usar as funções utilitárias já existentes.
+3. Emular cenário: criar usuário, autenticar, realizar ações autorizadas.
+4. Assertar status code, corpo da resposta e efeitos colaterais esperados.
+
+Exemplo mínimo (Vitest + Supertest):
+
+```js
+import request from 'supertest';
+import app from '../src/index.js';
+import { describe, it, expect } from 'vitest';
+
+describe('Exemplo', () => {
+  it('retorna 200 em /api/products', async () => {
+    const res = await request(app).get('/api/products');
+    expect(res.status).toBe(200);
+  });
+});
+```
+
+### 6) Rodando testes localmente
+- Executar todos os testes:
+
+```bash
+npm test
+# ou
+npx vitest run
+```
+
+- Rodar testes com cobertura:
+
+```bash
+npm run test:coverage
+```
+
+### 7) Interpretação do relatório de cobertura
+- Relatório V8 mostra percentuais por arquivo: Statements, Branches, Functions e Lines.
+- Foco em aumentar testes nas áreas com baixa cobertura de branches e funções críticas.
+
+### 8) Integração contínua (sugestão)
+- Configurar pipeline (GitHub Actions / GitLab CI) para:
+  - `npm ci`
+  - `npx vitest run --coverage`
+  - Falhar o pipeline se cobertura global estiver abaixo de um threshold (ex.: 75%).
+
+### 9) Boas práticas de QA aplicáveis aqui
+- Manter testes pequenos e com responsabilidade única.
+- Evitar dependência entre testes.
+- Usar dados gerados dinamicamente (timestamps, random) para evitar colisões.
+- Revisar e atualizar casos de borda à medida que novas regras de negócio surgem.
+
+### 10) Debug e diagnóstico
+- Habilite logs temporários no código (ou utilize `console.log`) durante desenvolvimento de testes.
+- Execute testes isolados com `npx vitest run tests/file.spec.js` para reduzir ruído ao depurar.
+
+### 11) Próximos passos recomendados para QA
+- Adicionar testes de contrato (contract tests) se houver integração externa.
+- Introduzir fixtures reutilizáveis para dados de teste.
+- Automatizar execução de testes no CI com thresholds de cobertura.
+
+---
+
+Se desejar, posso gerar uma coleção Postman/Insomnia com todos os exemplos de requisições e tokens de exemplo para uso manual/visual. Também posso criar templates de testes (boilerplate) para acelerar a escrita de novos casos.
+>>>>>>> af4439f (Docs: add Wiki section focused on QA and test strategy to README)
