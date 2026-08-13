@@ -137,7 +137,7 @@ Kívia Dantas
 
 ---
 
-## 🧾 Wiki — Guia de Testes (foco QA)
+## Guia de Testes
 
 Esta seção funciona como uma mini-wiki focada na atividade de QA: como os testes foram organizados, a estratégia adotada, diretrizes para escrever novos testes e como interpretar relatórios de cobertura.
 
