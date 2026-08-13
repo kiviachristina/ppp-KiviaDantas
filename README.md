@@ -1,55 +1,95 @@
-# Automação de Testes de API (Node.js, Express, Vitest, Swagger)
+# ppp-KiviaDantas
 
-Projeto de portfólio voltado a automação de testes de APIs e validação de regras de negócio e casos de borda. Implementa uma API REST em memória (simulada) que serve como alvo para uma suíte de testes automatizados escrita com Vitest e Supertest. A API fornece endpoints de gerenciamento de usuários e produtos, possui documentação OpenAPI (Swagger) e autenticação por JWT.
+Projeto de portfólio pessoal para automação de testes de API em e-commerce, com foco em regra de negócio, validação de entrada e casos de borda.
 
----
+## Visão geral
 
-## Tecnologias e Dependências Utilizadas
+Este repositório tem como objetivo demonstrar a aplicação de conceitos fundamentais de testes de software em uma API real, com foco em robustez e qualidade. A automação foi desenvolvida utilizando a API pública ServeRest, que simula um ambiente de e-commerce e oferece um cenário ideal para praticar testes de API, validações e análise de comportamento em cenários fora do fluxo feliz.
 
-- Node.js (ES Modules)
-- Express (servidor HTTP)
-- Vitest (test runner)
-- Supertest (testes de integração HTTP)
-- jsonwebtoken (JWT)
-- swagger-ui-express (Swagger UI)
-- nodemon (desenvolvimento)
+A suíte foi construída para validar:
 
-Dependências estão listadas em `package.json`.
+- regras de negócio do cadastro de produtos
+- tratamento de valores inválidos
+- status codes esperados pela API
+- mensagens retornadas no corpo JSON
+- comportamento em casos de borda e cenários críticos
 
----
+## Objetivo do projeto
 
-## Arquitetura e Estrutura de Pastas
+Aplicar técnicas de teste como:
 
-O projeto segue uma organização em camadas para facilitar manutenção e testes:
+- Partição de equivalência
+- Valoração de limites
+- Casos de borda
+- Validação de respostas de erro
+- Verificação de contrato e regras de negócio da API
 
-- `src/index.js` — ponto de entrada da aplicação (monta rotas e Swagger UI).
-- `src/api/routes/` — definição das rotas Express (por recurso).
-- `src/api/controllers/` — handlers que recebem requisições e chamam os services.
-- `src/api/services/` — lógica de negócio e armazenamento em memória (arrays).
-- `src/api/models/` — fábricas e shapes de objetos (usuário/produto).
-- `src/api/middlewares/` — middlewares reutilizáveis, incluindo `authMiddleware.js` (JWT).
-- `resources/swagger.json` — especificação OpenAPI da API (arquivo estático).
-- `tests/` — suíte de testes automatizados (Vitest + Supertest).
+## API utilizada
 
-Essa estrutura separa responsabilidades e facilita a criação de testes unitários e de integração.
+- ServeRest: https://serverest.dev/
 
----
+A API ServeRest foi escolhida por ser pública, gratuita e amplamente usada em treinamentos de QA para testes de API, especialmente em cenários de e-commerce.
+
+## Stack tecnológica
+
+- Node.js
+- Vitest
+- JavaScript
+- Fetch API nativa
+
+## Requisitos mapeados
+
+Os testes automatizados cobrem os seguintes requisitos:
+
+- RQ-01: O cadastro de produto deve aceitar somente payloads válidos
+- RQ-02: O campo preco deve rejeitar valores zero e negativos
+- RQ-03: O campo nome deve ser obrigatório
+- RQ-04: A API deve responder com status HTTP de erro quando houver dados inválidos
+- RQ-05: A API deve retornar mensagens claras no corpo da resposta
+- RQ-06: O backend atual não aplica regra de limite de tamanho específico para o nome do produto
+
+## Matriz de rastreabilidade de testes
+
+| Requisito da API | Cenário coberto | Resultado esperado | Status |
+| --- | --- | --- | --- |
+| RQ-01 | Cadastro de produto válido | Status 201 e mensagem de sucesso | Coberto |
+| RQ-02 | Preço zerado | 400 com mensagem indicando problema em preço | Coberto |
+| RQ-02 | Preço negativo | 400 com mensagem indicando problema em preço | Coberto |
+| RQ-03 | Payload sem nome e sem preço | 400 com erro específico do campo obrigatório | Coberto |
+| RQ-04 | Verificação de status HTTP | 400 ou 422 em caso de payload inválido | Coberto |
+| RQ-05 | Verificação da mensagem de erro | Corpo JSON com descrição do problema | Coberto |
+| RQ-06 | Nome de produto muito longo | Cadastro é aceito no backend atual, sem regra de limite | Coberto |
+
+## Estrutura do projeto
+
+```text
+ppp-KiviaDantas/
+├── README.md
+├── package.json
+├── package-lock.json
+├── src/
+│   └── api/
+│       └── serverest.js
+└── tests/
+    └── business-rules.spec.js
+```
+
+### Descrição dos arquivos
+
+- `README.md`: documentação do projeto, requisitos e instruções de uso
+- `package.json`: configuração do projeto e scripts
+- `src/api/serverest.js`: cliente HTTP para consumir os endpoints da API
+- `tests/business-rules.spec.js`: suíte de testes automatizados
 
 ## Pré-requisitos
 
-- Node.js v18+ (recomendado)
-- npm v9+ (ou gerenciador de pacotes compatível)
+Antes de rodar o projeto, certifique-se de ter instalado:
 
-Verifique as versões instaladas:
+- Node.js 18 ou superior
+- npm
+- Git
 
-```bash
-node -v
-npm -v
-```
-
----
-
-## Passo a Passo de Instalação e Execução
+## Instalação
 
 1. Clone o repositório:
 
@@ -64,159 +104,101 @@ cd ppp-KiviaDantas
 npm install
 ```
 
-3. Variáveis de ambiente (opcional, recomendado):
+## Execução dos testes
 
-Crie um arquivo `.env` ou exporte variáveis no ambiente com ao menos:
-
-```
-PORT=3000
-JWT_SECRET=uma_chave_forte_aqui
-```
-
-4. Executar o servidor:
-
-- Modo produção/local (sem reload):
-
-```bash
-node src/index.js
-```
-
-- Modo desenvolvimento (com nodemon):
-
-```bash
-npm run dev
-```
-
-5. Acesse a API e documentação:
-
-- URL base: `http://localhost:3000`
-- Swagger UI (documentação interativa): `http://localhost:3000/api-docs`
-
----
-
-## Como Rodar a Suíte de Testes Automatizados
-
-Testes implementados com Vitest e Supertest (integração HTTP).
-
-- Executar testes:
-
-```bash
-npx vitest run
-# ou
-npm test
-```
-
-- Executar testes com relatório de cobertura (V8 provider):
-
-```bash
-npm run test:coverage
-```
-
-O relatório de cobertura será gerado em `coverage/`.
-
----
-
-## Segurança e Autenticação
-
-A autenticação implementada utiliza JSON Web Tokens (JWT):
-
-- O endpoint `POST /api/users/login` retorna um token JWT no formato `{ "authorization": "<token>" }`.
-- Endpoints protegidos exigem o header HTTP `Authorization` com o valor `Bearer <token>`.
-- A validação do token é feita no middleware `src/api/middlewares/authMiddleware.js`, que verifica a assinatura usando a variável de ambiente `JWT_SECRET` (ou um valor padrão em desenvolvimento). Em caso de token inválido ou ausente, a API retorna `401 Unauthorized`.
-
-Observações de segurança:
-- Não commit o segredo JWT em repositórios públicos. Use variáveis de ambiente ou secret manager.
-- Em produção, substitua o armazenamento em memória por banco persistente e implemente políticas de segurança adicionais (rate limiting, CORS adequado, validação/sanitização de entradas).
-
----
-
-## Autora
-
-Kívia Dantas
-
-
----
-
-## Guia de Testes
-
-Esta seção funciona como uma mini-wiki focada na atividade de QA: como os testes foram organizados, a estratégia adotada, diretrizes para escrever novos testes e como interpretar relatórios de cobertura.
-
-### 1) Objetivo dos testes
-- Validar regras de negócio e casos de borda da API E-Commerce.
-- Garantir comportamento esperado em criação/autenticação de usuários e operações CRUD de produtos.
-
-### 2) Tipos de testes incluídos
-- Testes de integração HTTP (Vitest + Supertest): exercitam rotas reais da aplicação contra o app Express exportado (`src/index.js`).
-- Testes unitários podem ser adicionados na pasta `tests/` utilizando mocks nas services.
-
-### 3) Localização dos testes
-- Arquivos de teste: `tests/*.spec.js` (ex.: `tests/api.spec.js`, `tests/business-rules.spec.js`).
-
-### 4) Estratégia de escrita de testes
-- Priorizar regras de negócio e fluxos críticos (login, autorização, validação de payloads).
-- Cada teste deve ser independente e idempotente: use emails/produtos gerados dinamicamente para evitar colisões.
-- Preferir testar comportamentos (status codes, mensagens, shape do JSON) em vez de implementação interna.
-
-### 5) Como adicionar um novo teste (passo a passo)
-1. Criar arquivo `tests/novo-caso.spec.js`.
-2. Importar `request` do `supertest` ou usar as funções utilitárias já existentes.
-3. Emular cenário: criar usuário, autenticar, realizar ações autorizadas.
-4. Assertar status code, corpo da resposta e efeitos colaterais esperados.
-
-Exemplo mínimo (Vitest + Supertest):
-
-```js
-import request from 'supertest';
-import app from '../src/index.js';
-import { describe, it, expect } from 'vitest';
-
-describe('Exemplo', () => {
-  it('retorna 200 em /api/products', async () => {
-    const res = await request(app).get('/api/products');
-    expect(res.status).toBe(200);
-  });
-});
-```
-
-### 6) Rodando testes localmente
-- Executar todos os testes:
+Para rodar a suíte completa:
 
 ```bash
 npm test
-# ou
-npx vitest run
 ```
 
-- Rodar testes com cobertura:
+Para executar em modo interativo durante o desenvolvimento:
 
 ```bash
-npm run test:coverage
+npm run test:watch
 ```
 
-### 7) Interpretação do relatório de cobertura
-- Relatório V8 mostra percentuais por arquivo: Statements, Branches, Functions e Lines.
-- Foco em aumentar testes nas áreas com baixa cobertura de branches e funções críticas.
+## Como funciona a automação
 
-### 8) Integração contínua (sugestão)
-- Configurar pipeline (GitHub Actions / GitLab CI) para:
-  - `npm ci`
-  - `npx vitest run --coverage`
-  - Falhar o pipeline se cobertura global estiver abaixo de um threshold (ex.: 75%).
+A suíte realiza os seguintes passos:
 
-### 9) Boas práticas de QA aplicáveis aqui
-- Manter testes pequenos e com responsabilidade única.
-- Evitar dependência entre testes.
-- Usar dados gerados dinamicamente (timestamps, random) para evitar colisões.
-- Revisar e atualizar casos de borda à medida que novas regras de negócio surgem.
+1. Cria um usuário administrador na API
+2. Realiza login com as credenciais do usuário
+3. Gera um token de autenticação
+4. Envia payloads válidos e inválidos para o endpoint de produtos
+5. Valida o status HTTP e a mensagem no JSON da resposta
+6. Confirma se o comportamento da API está alinhado com as regras esperadas
 
-### 10) Debug e diagnóstico
-- Habilite logs temporários no código (ou utilize `console.log`) durante desenvolvimento de testes.
-- Execute testes isolados com `npx vitest run tests/file.spec.js` para reduzir ruído ao depurar.
+## Casos cobertos pela automação
 
-### 11) Próximos passos recomendados para QA
-- Adicionar testes de contrato (contract tests) se houver integração externa.
-- Introduzir fixtures reutilizáveis para dados de teste.
-- Automatizar execução de testes no CI com thresholds de cobertura.
+### 1. Produto válido
+- nome adequado
+- preço numérico positivo
+- descrição presente
+- quantidade válida
 
----
+Resultado esperado: cadastro com sucesso
 
+### 2. Preço zerado
+- payload com `preco: 0`
+
+Resultado esperado: erro de validação
+
+### 3. Preço negativo
+- payload com `preco: -1`
+
+Resultado esperado: erro de validação
+
+### 4. Payload sem campos obrigatórios
+- ausência de nome e/ou preço
+
+Resultado esperado: erro de validação com mensagem clara
+
+### 5. Caso de borda com nome longo
+- entrada com string longa, mas válida na prática para o backend atual
+
+Resultado observado: cadastro aceito sem regra de limite específica no backend
+
+## Observações importantes
+
+Durante a validação real com a API ServeRest, foi possível confirmar alguns comportamentos relevantes:
+
+- o campo `administrador` deve ser enviado em formato string, conforme a API exige
+- o endpoint `/produtos` exige campos obrigatórios para um cadastro válido
+- a API rejeita `preco` zerado ou negativo com mensagens específicas
+- a API atual não bloqueia nomes extremamente longos, e isso foi documentado como comportamento observado
+
+Essas observações são importantes para a rotina de QA, porque refletem a realidade do sistema e ajudam a alinhar as expectativas de testes com o comportamento do backend.
+
+## Resultado da execução
+
+A suíte foi validada com sucesso via comando:
+
+```bash
+npm test
+```
+
+Saída esperada:
+
+```text
+Test Files  1 passed (1)
+Tests       5 passed (5)
+```
+
+## Objetivo profissional
+
+Este projeto foi desenvolvido como material de portfólio para demonstrar capacidade de:
+
+- automação de testes de API
+- análise de regras de negócio
+- exploração de casos de borda
+- documentação de testes e rastreabilidade
+- apresentação de evidências de qualidade em projetos reais
+
+## Autor
+
+Kivia Dantas
+
+## Licença
+
+Este projeto está sob a licença ISC.
